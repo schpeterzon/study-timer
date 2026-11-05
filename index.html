@@ -663,7 +663,7 @@
       $("studyInput").addEventListener("change", (event) => changeDuration("study", event.target.value));
       $("breakInput").addEventListener("change", (event) => changeDuration("break", event.target.value));
       $("autoStartInput").addEventListener("change", (event) => { prefs.autoStart = event.target.checked; savePrefs(); render(); toast(prefs.autoStart ? "The next interval will start automatically." : "Intervals will switch and wait for you."); });
-      $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; savePrefs(); render(); if (prefs.sound) { prepareAudio(); playPhaseCue(phase); toast("Sound is on. Focus and break have different cues."); } });
+      $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; savePrefs(); render(); if (prefs.sound) { playPhaseCue(phase); toast("Sound is on. Focus and break have different cues."); } });
 
       const themeMenu = $("themeMenu");
       $("themeTrigger").addEventListener("click", () => {
