@@ -3,90 +3,92 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#e9efe7">
+  <meta name="theme-color" content="#edf1f5">
   <meta name="description" content="A calm, customizable study timer that keeps focus and rest in rhythm.">
   <title>Study Timer — find your flow</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <style>
-    :root {
+    :root, body[data-theme="focus-light"] {
       color-scheme: light;
-      --page: #e8eee6;
-      --page-glow: #f4f6ef;
-      --surface: #f7f8f3;
-      --surface-raised: #fffefa;
-      --ink: #1e2b27;
-      --ink-soft: #465650;
-      --muted: #85918a;
-      --line: #dce4da;
-      --line-strong: #cdd8ce;
-      --accent: #376451;
-      --accent-hover: #294e3d;
-      --accent-contrast: #f5f8f2;
-      --accent-soft: #e3eee3;
-      --accent-wash: #edf4ec;
-      --warm: #d7a96a;
-      --focus-glow: rgba(55, 100, 81, .18);
-      --shadow: 0 22px 65px rgba(46, 67, 51, .08), 0 2px 10px rgba(46, 67, 51, .04);
+      --page: #edf1f5;
+      --page-glow: #f8fafc;
+      --surface: #f7f9fb;
+      --surface-raised: #fff;
+      --ink: #1d2c3b;
+      --ink-soft: #4b5c6d;
+      --muted: #8291a0;
+      --line: #dce4eb;
+      --line-strong: #cad5df;
+      --accent: #3f6f9d;
+      --accent-hover: #315b83;
+      --accent-contrast: #f7fbff;
+      --accent-soft: #dfebf5;
+      --accent-wash: #edf4fa;
+      --warm: #d4a15f;
+      --focus-glow: rgba(63, 111, 157, .17);
+      --shadow: 0 22px 65px rgba(36, 57, 78, .08), 0 2px 10px rgba(36, 57, 78, .04);
       --font: "Avenir Next", Avenir, "Segoe UI", sans-serif;
       --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
     }
-    body[data-theme="midnight"] {
+    body[data-theme="focus-dark"] {
       color-scheme: dark;
-      --page: #151d1b;
-      --page-glow: #1c2723;
-      --surface: #202b27;
-      --surface-raised: #27332f;
-      --ink: #edf3ed;
-      --ink-soft: #c0ccc4;
-      --muted: #8e9c94;
-      --line: #35443d;
-      --line-strong: #43574c;
-      --accent: #8ec9a1;
-      --accent-hover: #a4d9b3;
-      --accent-contrast: #14221b;
-      --accent-soft: #2a4034;
-      --accent-wash: #26382e;
-      --warm: #d2aa72;
-      --focus-glow: rgba(142, 201, 161, .18);
-      --shadow: 0 22px 65px rgba(0, 0, 0, .22), 0 2px 10px rgba(0, 0, 0, .12);
+      --page: #111d29;
+      --page-glow: #1a2a3a;
+      --surface: #1a2937;
+      --surface-raised: #223544;
+      --ink: #edf4f8;
+      --ink-soft: #bfd0dc;
+      --muted: #8da2b1;
+      --line: #304452;
+      --line-strong: #425b6b;
+      --accent: #86bddc;
+      --accent-hover: #a0d0e8;
+      --accent-contrast: #12212c;
+      --accent-soft: #263e4e;
+      --accent-wash: #203746;
+      --warm: #dfb879;
+      --focus-glow: rgba(134, 189, 220, .19);
+      --shadow: 0 22px 65px rgba(0, 0, 0, .25), 0 2px 10px rgba(0, 0, 0, .14);
     }
-    body[data-theme="lavender"] {
-      --page: #eeeaf4;
-      --page-glow: #f8f5fb;
-      --surface: #faf8fc;
+    body[data-theme="calm-light"] {
+      color-scheme: light;
+      --page: #eaf0e9;
+      --page-glow: #f6f8f1;
+      --surface: #f8faf5;
       --surface-raised: #fff;
-      --ink: #29243a;
-      --ink-soft: #5c5670;
-      --muted: #918ba0;
-      --line: #e2dcec;
-      --line-strong: #d4cce1;
-      --accent: #765db1;
-      --accent-hover: #624c99;
-      --accent-contrast: #fff;
-      --accent-soft: #ebe5f6;
-      --accent-wash: #f1edf8;
-      --warm: #d9a973;
-      --focus-glow: rgba(118, 93, 177, .18);
-      --shadow: 0 22px 65px rgba(72, 56, 102, .09), 0 2px 10px rgba(72, 56, 102, .04);
+      --ink: #25342d;
+      --ink-soft: #526257;
+      --muted: #89968c;
+      --line: #dce5db;
+      --line-strong: #cbd7ca;
+      --accent: #548269;
+      --accent-hover: #416d55;
+      --accent-contrast: #f8fbf6;
+      --accent-soft: #e1ede2;
+      --accent-wash: #edf4eb;
+      --warm: #cba571;
+      --focus-glow: rgba(84, 130, 105, .16);
+      --shadow: 0 22px 65px rgba(43, 66, 47, .08), 0 2px 10px rgba(43, 66, 47, .04);
     }
-    body[data-theme="clay"] {
-      --page: #f0e9df;
-      --page-glow: #fbf5eb;
-      --surface: #faf7f0;
-      --surface-raised: #fffdf8;
-      --ink: #342a24;
-      --ink-soft: #67584c;
-      --muted: #998c7e;
-      --line: #e7ddce;
-      --line-strong: #d9cbbb;
-      --accent: #a75f40;
-      --accent-hover: #8d4f34;
-      --accent-contrast: #fffaf2;
-      --accent-soft: #f2e4d8;
-      --accent-wash: #f7eee5;
-      --warm: #c58d50;
-      --focus-glow: rgba(167, 95, 64, .16);
-      --shadow: 0 22px 65px rgba(87, 61, 41, .09), 0 2px 10px rgba(87, 61, 41, .04);
+    body[data-theme="calm-dark"] {
+      color-scheme: dark;
+      --page: #17201c;
+      --page-glow: #233029;
+      --surface: #202b25;
+      --surface-raised: #293630;
+      --ink: #eef3ed;
+      --ink-soft: #c4cec5;
+      --muted: #93a096;
+      --line: #39483e;
+      --line-strong: #4d6052;
+      --accent: #9ac4a4;
+      --accent-hover: #b1d4b8;
+      --accent-contrast: #17251c;
+      --accent-soft: #2e4234;
+      --accent-wash: #273a2e;
+      --warm: #d9b47a;
+      --focus-glow: rgba(154, 196, 164, .17);
+      --shadow: 0 22px 65px rgba(0, 0, 0, .24), 0 2px 10px rgba(0, 0, 0, .13);
     }
     * { box-sizing: border-box; }
     body {
@@ -125,12 +127,15 @@
     .theme-trigger:hover { border-color: var(--line-strong); transform: translateY(-1px); }
     .theme-trigger svg { width: 15px; height: 15px; color: var(--accent); }
     .theme-trigger span { font-size: 11px; font-weight: 650; }
-    .theme-menu { position: absolute; z-index: 4; top: calc(100% + 9px); right: 0; width: 190px; padding: 8px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface-raised); box-shadow: var(--shadow); }
+    .theme-menu { position: absolute; z-index: 4; top: calc(100% + 9px); right: 0; width: 232px; padding: 8px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface-raised); box-shadow: var(--shadow); }
     .theme-menu[hidden] { display: none; }
-    .theme-menu-title { margin: 4px 8px 7px; color: var(--muted); font-size: 9px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
-    .theme-choice { display: flex; align-items: center; width: 100%; gap: 10px; padding: 8px; border: 0; border-radius: 9px; background: transparent; color: var(--ink-soft); cursor: pointer; text-align: left; font-size: 12px; }
+    .theme-menu-title { margin: 4px 8px 7px; color: var(--muted); font-size: 9px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .theme-choice { display: flex; align-items: center; width: 100%; min-height: 44px; gap: 10px; padding: 6px 8px; border: 0; border-radius: 9px; background: transparent; color: var(--ink-soft); cursor: pointer; text-align: left; font-size: 12px; }
     .theme-choice:hover, .theme-choice[aria-pressed="true"] { background: var(--accent-wash); color: var(--ink); }
     .theme-swatch { width: 18px; height: 18px; border: 1px solid rgba(0,0,0,.08); border-radius: 50%; background: var(--swatch); box-shadow: inset -4px -3px 0 rgba(0,0,0,.1); }
+    .theme-choice-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 2px; }
+    .theme-choice-name { font-size: 11px; font-weight: 700; }
+    .theme-choice-hint { color: var(--muted); font-size: 9px; line-height: 1.2; }
     .theme-check { margin-left: auto; color: var(--accent); font-weight: 800; }
     .intro { display: flex; align-items: end; justify-content: space-between; gap: 36px; margin: 0 4px 28px; }
     .eyebrow { display: flex; align-items: center; gap: 9px; margin-bottom: 11px; color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .19em; text-transform: uppercase; }
@@ -282,7 +287,7 @@
     }
   </style>
 </head>
-<body data-theme="sage">
+<body data-theme="focus-light">
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="#top" aria-label="Study Timer home">
@@ -296,15 +301,15 @@
         <div class="theme-wrap" id="themeWrap">
           <button class="theme-trigger" id="themeTrigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-1-.8-1.8-1.8-1.8h-1.4a1.8 1.8 0 0 1-1.5-2.7 1.8 1.8 0 0 0-1.5-2.7H12Z" stroke="currentColor" stroke-width="1.6"/><path d="M7.6 12h.01M10.3 7.7h.01M14.6 7.9h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-            <span id="themeName">Sage</span>
+            <span id="themeName">Focus · Light</span>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="theme-menu" id="themeMenu" role="menu" aria-label="Choose a theme" hidden>
-            <p class="theme-menu-title">Make it yours</p>
-            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="sage" aria-pressed="true"><span class="theme-swatch" style="--swatch:#87a98b"></span>Sage<span class="theme-check">✓</span></button>
-            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="midnight" aria-pressed="false"><span class="theme-swatch" style="--swatch:#334a40"></span>Midnight<span class="theme-check"></span></button>
-            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="lavender" aria-pressed="false"><span class="theme-swatch" style="--swatch:#a28acb"></span>Lavender<span class="theme-check"></span></button>
-            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="clay" aria-pressed="false"><span class="theme-swatch" style="--swatch:#c07c58"></span>Warm clay<span class="theme-check"></span></button>
+            <p class="theme-menu-title">Choose a study mood</p>
+            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="focus-light" aria-pressed="true"><span class="theme-swatch" style="--swatch:#3f6f9d"></span><span class="theme-choice-copy"><span class="theme-choice-name">Focus · Light</span><span class="theme-choice-hint">Clear contrast, cool tones</span></span><span class="theme-check">✓</span></button>
+            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="focus-dark" aria-pressed="false"><span class="theme-swatch" style="--swatch:#86bddc"></span><span class="theme-choice-copy"><span class="theme-choice-name">Focus · Dark</span><span class="theme-choice-hint">Deep blue, crisp highlights</span></span><span class="theme-check"></span></button>
+            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="calm-light" aria-pressed="false"><span class="theme-swatch" style="--swatch:#548269"></span><span class="theme-choice-copy"><span class="theme-choice-name">Calm · Light</span><span class="theme-choice-hint">Soft sage, gentle contrast</span></span><span class="theme-check"></span></button>
+            <button class="theme-choice" type="button" role="menuitemradio" data-theme-choice="calm-dark" aria-pressed="false"><span class="theme-swatch" style="--swatch:#9ac4a4"></span><span class="theme-choice-copy"><span class="theme-choice-name">Calm · Dark</span><span class="theme-choice-hint">Quiet forest, warm rest tones</span></span><span class="theme-check"></span></button>
           </div>
         </div>
       </div>
@@ -419,18 +424,25 @@
     (() => {
       const PREFS_KEY = "studyTimerPreferences.v1";
       const TIMER_KEY = "studyTimerState.v1";
-      const THEMES = { sage: "Sage", midnight: "Midnight", lavender: "Lavender", clay: "Warm clay" };
+      const THEMES = {
+        "focus-light": { label: "Focus · Light", browserColor: "#edf1f5" },
+        "focus-dark": { label: "Focus · Dark", browserColor: "#111d29" },
+        "calm-light": { label: "Calm · Light", browserColor: "#eaf0e9" },
+        "calm-dark": { label: "Calm · Dark", browserColor: "#17201c" }
+      };
+      const LEGACY_THEMES = { sage: "calm-light", midnight: "calm-dark", lavender: "focus-light", clay: "calm-light" };
       const studyIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 7h6m-6 3h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
       const breakIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4v6m4-6v6M5 10h8M9 10v10m8-16v16m0-16c2 2 3 4.2 3 6.3 0 1.8-1.1 2.7-3 2.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       const dayKey = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-      const defaults = { studyMinutes: 25, breakMinutes: 5, theme: "sage", autoStart: true, sound: false, completed: 0, focusMinutes: 0, date: dayKey() };
+      const defaults = { studyMinutes: 25, breakMinutes: 5, theme: "focus-light", autoStart: true, sound: false, completed: 0, focusMinutes: 0, date: dayKey() };
       const readJson = (key) => { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } };
       const initialPrefs = readJson(PREFS_KEY) || {};
       const isNewDay = initialPrefs.date && initialPrefs.date !== dayKey();
+      const savedTheme = LEGACY_THEMES[initialPrefs.theme] || initialPrefs.theme;
       const prefs = {
         studyMinutes: clamp(Number(initialPrefs.studyMinutes) || defaults.studyMinutes, 1, 180),
         breakMinutes: clamp(Number(initialPrefs.breakMinutes) || defaults.breakMinutes, 1, 60),
-        theme: THEMES[initialPrefs.theme] ? initialPrefs.theme : defaults.theme,
+        theme: THEMES[savedTheme] ? savedTheme : defaults.theme,
         autoStart: typeof initialPrefs.autoStart === "boolean" ? initialPrefs.autoStart : defaults.autoStart,
         sound: typeof initialPrefs.sound === "boolean" ? initialPrefs.sound : defaults.sound,
         completed: isNewDay ? 0 : Math.max(0, Math.floor(Number(initialPrefs.completed) || 0)),
@@ -465,8 +477,8 @@
       }
       function setTheme(theme) {
         if (!THEMES[theme]) return;
-        prefs.theme = theme; document.body.dataset.theme = theme; $("themeName").textContent = THEMES[theme];
-        document.querySelector('meta[name="theme-color"]').content = theme === "midnight" ? "#151d1b" : theme === "lavender" ? "#eeeaf4" : theme === "clay" ? "#f0e9df" : "#e8eee6";
+        prefs.theme = theme; document.body.dataset.theme = theme; $("themeName").textContent = THEMES[theme].label;
+        document.querySelector('meta[name="theme-color"]').content = THEMES[theme].browserColor;
         document.querySelectorAll("[data-theme-choice]").forEach((button) => {
           const active = button.dataset.themeChoice === theme;
           button.setAttribute("aria-pressed", String(active));
