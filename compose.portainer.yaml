@@ -1,0 +1,13 @@
+services:
+  study-timer:
+    image: ${STUDY_TIMER_IMAGE:?Set STUDY_TIMER_IMAGE to the pushed image}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
