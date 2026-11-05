@@ -234,6 +234,8 @@
     .settings-spark svg { width: 17px; height: 17px; }
     .duration-list { display: grid; gap: 10px; }
     .duration-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 13px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-raised); }
+    .session-count-card { grid-column: 1 / -1; }
+    .session-count-card .duration-hint { max-width: 175px; white-space: normal; }
     .duration-card.is-active { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); box-shadow: 0 0 0 3px var(--focus-glow); }
     .duration-meta { display: flex; align-items: center; gap: 11px; min-width: 0; }
     .duration-icon { display: grid; place-items: center; flex: 0 0 auto; width: 34px; height: 34px; border-radius: 11px; background: var(--accent-wash); color: var(--accent); }
@@ -246,6 +248,7 @@
     .step-button:hover { border-color: var(--line-strong); color: var(--accent); }
     .step-button svg { width: 13px; height: 13px; }
     .duration-input { width: 31px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 15px; font-weight: 750; text-align: center; font-variant-numeric: tabular-nums; appearance: textfield; }
+    .session-count-input { width: 25px; }
     .duration-input::-webkit-inner-spin-button, .duration-input::-webkit-outer-spin-button { margin: 0; appearance: none; }
     .minutes-suffix { margin-left: -7px; color: var(--muted); font-size: 9px; }
     .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-top: 18px; padding: 13px 1px 15px; border-bottom: 1px solid var(--line); }
@@ -267,6 +270,8 @@
     .summary-total { color: var(--accent); font-family: var(--serif); font-size: 22px; }
     .settings-footer { display: flex; justify-content: space-between; gap: 15px; margin: 13px 1px 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
     .settings-footer strong { color: var(--ink-soft); font-weight: 650; }
+    .reset-defaults-button { padding: 0; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 9px; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: color .2s, text-decoration-color .2s; }
+    .reset-defaults-button:hover { color: var(--accent); text-decoration-color: currentColor; }
     .toast { position: fixed; z-index: 8; right: 24px; bottom: 24px; max-width: calc(100vw - 48px); padding: 12px 15px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface-raised); color: var(--ink); box-shadow: var(--shadow); font-size: 11px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
     .toast.is-visible { opacity: 1; transform: translateY(0); }
     .page-footer { display: flex; justify-content: space-between; gap: 12px; margin: 16px 4px 0; color: var(--muted); font-size: 9px; }
@@ -307,11 +312,12 @@
       .timer-display { font-size: 62px; }
       .timer-buttons { margin: 3px 0 16px; }
       .primary-button { min-width: 142px; }
-      .timer-foot { align-items: flex-start; }
-      .cycle-dots { gap: 4px; }
+      .timer-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; row-gap: 10px; }
+      .cycle-copy { grid-column: 1; grid-row: 1; }
+      .cycle-dots { grid-column: 1 / -1; grid-row: 2; justify-content: center; gap: 4px; }
       .cycle-dot { width: 14px; }
       .cycle-dot.is-current { width: 20px; }
-      .foot-tools { gap: 8px; }
+      .foot-tools { grid-column: 2; grid-row: 1; gap: 8px; }
       .sound-button { font-size: 9px; }
       .settings-panel { padding: 19px 15px 16px; }
       .duration-list { grid-template-columns: 1fr; gap: 8px; }
@@ -403,7 +409,7 @@
 
           <div class="timer-foot">
             <div class="cycle-copy"><span class="cycle-title" id="cycleTitle">Your focus cycle</span><span class="cycle-caption" id="cycleCaption">A small win at a time</span></div>
-            <div class="cycle-dots" aria-label="Progress through four sessions"><i class="cycle-dot is-current"></i><i class="cycle-dot"></i><i class="cycle-dot"></i><i class="cycle-dot"></i></div>
+            <div class="cycle-dots" id="cycleDots" role="img" aria-label="0 of 4 focus sessions completed in this cycle"></div>
             <div class="foot-tools">
               <button class="sound-button" id="soundButton" type="button" aria-pressed="false" title="Toggle distinct focus and break sounds">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 9a4 4 0 0 1 0 6m2-8a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -434,6 +440,13 @@
               </div>
               <div class="stepper"><button class="step-button" type="button" data-step="break" data-delta="-1" aria-label="Decrease break interval by one minute"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><input class="duration-input" id="breakInput" type="number" inputmode="numeric" min="1" max="60" step="1" value="5" aria-label="Break interval in minutes"><span class="minutes-suffix">min</span><button class="step-button" type="button" data-step="break" data-delta="1" aria-label="Increase break interval by one minute"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
             </div>
+            <div class="duration-card session-count-card">
+              <div class="duration-meta">
+                <span class="duration-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 17V9m7 8V5m7 12v-5M3 20h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                <div><div class="duration-name">Focus sessions per cycle</div><div class="duration-hint">Choose how many sessions to complete</div></div>
+              </div>
+              <div class="stepper"><button class="step-button" type="button" data-session-delta="-1" aria-label="Decrease focus sessions per cycle"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><input class="duration-input session-count-input" id="sessionsPerCycleInput" type="number" inputmode="numeric" min="1" max="12" step="1" value="4" aria-label="Number of focus sessions per cycle"><button class="step-button" type="button" data-session-delta="1" aria-label="Increase focus sessions per cycle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+            </div>
           </div>
 
           <div class="switch-row">
@@ -444,9 +457,9 @@
           <div class="session-summary" aria-live="polite">
             <span class="summary-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 17V9m7 8V5m7 12v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 20h18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
             <div class="summary-main"><div class="summary-title">A steady little streak</div><div class="summary-caption" id="sessionSummary">Every completed focus session counts.</div></div>
-            <div class="summary-total"><span id="summarySessions">0</span><small style="font-family:var(--font);font-size:9px;color:var(--muted)"> / 4</small></div>
+            <div class="summary-total"><span id="summarySessions">0</span><small id="summarySessionTarget" style="font-family:var(--font);font-size:9px;color:var(--muted)"> / 4</small></div>
           </div>
-          <div class="settings-footer"><span><strong id="selectedDuration">25 min focus</strong> · <span id="selectedBreak">5 min break</span></span><span>Adjust any time</span></div>
+          <div class="settings-footer"><span><strong id="selectedDuration">25 min focus</strong> · <span id="selectedBreak">5 min break</span></span><button class="reset-defaults-button" id="restoreDefaultsButton" type="button" title="Reset intervals, theme, sound, timer, and session progress">Restore defaults</button></div>
         </aside>
       </div>
     </main>
@@ -472,7 +485,7 @@
       const studyIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 7h6m-6 3h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
       const breakIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4v6m4-6v6M5 10h8M9 10v10m8-16v16m0-16c2 2 3 4.2 3 6.3 0 1.8-1.1 2.7-3 2.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       const dayKey = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-      const defaults = { studyMinutes: 25, breakMinutes: 5, theme: "focus-light", autoStart: true, sound: false, completed: 0, focusMinutes: 0, date: dayKey() };
+      const defaults = { studyMinutes: 25, breakMinutes: 5, sessionsPerCycle: 4, theme: "focus-light", autoStart: true, sound: false, completed: 0, focusMinutes: 0, date: dayKey() };
       const readJson = (key) => { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } };
       const initialPrefs = readJson(PREFS_KEY) || {};
       const isNewDay = initialPrefs.date && initialPrefs.date !== dayKey();
@@ -480,6 +493,7 @@
       const prefs = {
         studyMinutes: clamp(Number(initialPrefs.studyMinutes) || defaults.studyMinutes, 1, 180),
         breakMinutes: clamp(Number(initialPrefs.breakMinutes) || defaults.breakMinutes, 1, 60),
+        sessionsPerCycle: clamp(Math.floor(Number(initialPrefs.sessionsPerCycle) || defaults.sessionsPerCycle), 1, 12),
         theme: THEMES[savedTheme] ? savedTheme : defaults.theme,
         autoStart: typeof initialPrefs.autoStart === "boolean" ? initialPrefs.autoStart : defaults.autoStart,
         sound: typeof initialPrefs.sound === "boolean" ? initialPrefs.sound : defaults.sound,
@@ -544,6 +558,7 @@
         $("breakCard").classList.toggle("is-active", phase === "break");
         if (document.activeElement !== $("studyInput")) $("studyInput").value = prefs.studyMinutes;
         if (document.activeElement !== $("breakInput")) $("breakInput").value = prefs.breakMinutes;
+        if (document.activeElement !== $("sessionsPerCycleInput")) $("sessionsPerCycleInput").value = prefs.sessionsPerCycle;
         $("selectedDuration").textContent = `${prefs.studyMinutes} min focus`;
         $("selectedBreak").textContent = `${prefs.breakMinutes} min break`;
         $("autoStartInput").checked = prefs.autoStart;
@@ -551,15 +566,29 @@
         $("soundLabel").textContent = prefs.sound ? "Sound on" : "Sound off";
         $("sessionsStat").textContent = prefs.completed;
         $("focusHours").textContent = prefs.focusMinutes;
-        $("summarySessions").textContent = prefs.completed % 4 || (prefs.completed > 0 ? 4 : 0);
+        const cycleTarget = prefs.sessionsPerCycle;
+        const cycleRemainder = prefs.completed % cycleTarget;
+        const cycleComplete = prefs.completed > 0 && cycleRemainder === 0;
+        const completedThisCycle = cycleComplete ? cycleTarget : cycleRemainder;
+        $("summarySessions").textContent = completedThisCycle;
+        $("summarySessionTarget").textContent = `/ ${cycleTarget}`;
         $("sessionSummary").textContent = prefs.completed ? `${prefs.completed} focus ${prefs.completed === 1 ? "session" : "sessions"} completed. Lovely work.` : "Every completed focus session counts.";
-        const countInCycle = prefs.completed % 4;
-        document.querySelectorAll(".cycle-dot").forEach((dot, index) => {
-          dot.classList.toggle("is-done", index < countInCycle);
-          dot.classList.toggle("is-current", index === countInCycle);
-        });
-        $("cycleTitle").textContent = `${countInCycle || (prefs.completed > 0 ? 4 : 0)} of 4 sessions this cycle`;
-        $("cycleCaption").textContent = prefs.completed >= 4 && countInCycle === 0 ? "A nice time for a longer pause" : "A small win at a time";
+        const cycleDots = $("cycleDots");
+        const cycleProgressKey = `${cycleTarget}:${completedThisCycle}:${cycleComplete}`;
+        if (cycleDots.dataset.progress !== cycleProgressKey) {
+          if (cycleDots.childElementCount !== cycleTarget) {
+            cycleDots.replaceChildren(...Array.from({ length: cycleTarget }, () => document.createElement("i")));
+          }
+          [...cycleDots.children].forEach((dot, index) => {
+            dot.className = "cycle-dot";
+            if (index < completedThisCycle) dot.classList.add("is-done");
+            else if (!cycleComplete && index === completedThisCycle) dot.classList.add("is-current");
+          });
+          cycleDots.dataset.progress = cycleProgressKey;
+        }
+        cycleDots.setAttribute("aria-label", `${completedThisCycle} of ${cycleTarget} focus sessions completed in this cycle`);
+        $("cycleTitle").textContent = `${completedThisCycle} of ${cycleTarget} sessions this cycle`;
+        $("cycleCaption").textContent = cycleComplete ? "A nice time for a longer pause" : "A small win at a time";
         document.title = `${format(remaining)} · ${phase === "study" ? "Focus" : "Break"} — Study Timer`;
       }
       function start() {
@@ -652,9 +681,24 @@
         if (isRunning && phase === kind && remaining <= 0) { completeInterval(); return; }
         savePrefs(); saveTimer(); render();
       }
+      function changeSessionsPerCycle(value) {
+        prefs.sessionsPerCycle = clamp(Math.round(Number(value) || 1), 1, 12);
+        savePrefs(); render();
+      }
+      function restoreDefaults() {
+        if (!window.confirm("Restore all default settings and clear today's session progress and timer?")) return;
+        Object.assign(prefs, defaults, { date: dayKey() });
+        phase = "study"; remaining = secondsFor("study"); isRunning = false; endAt = null;
+        try { localStorage.removeItem(PREFS_KEY); localStorage.removeItem(TIMER_KEY); } catch {}
+        if (audioContext && audioContext.state !== "closed") audioContext.close().catch(() => {});
+        audioContext = null;
+        setTheme(prefs.theme); saveTimer(); render();
+        toast("Defaults restored and session progress cleared.");
+      }
 
       $("startButton").addEventListener("click", start);
       $("resetButton").addEventListener("click", reset);
+      $("restoreDefaultsButton").addEventListener("click", restoreDefaults);
       $("skipButton").addEventListener("click", () => { selectPhase(phase === "study" ? "break" : "study", true); toast(`Switched to ${phase === "study" ? "focus" : "your break"}.`); });
       document.querySelectorAll("[data-step]").forEach((button) => button.addEventListener("click", () => {
         const kind = button.dataset.step; const input = $(kind === "study" ? "studyInput" : "breakInput");
@@ -662,6 +706,11 @@
       }));
       $("studyInput").addEventListener("change", (event) => changeDuration("study", event.target.value));
       $("breakInput").addEventListener("change", (event) => changeDuration("break", event.target.value));
+      $("sessionsPerCycleInput").addEventListener("change", (event) => changeSessionsPerCycle(event.target.value));
+      document.querySelectorAll("[data-session-delta]").forEach((button) => button.addEventListener("click", () => {
+        const current = Number($("sessionsPerCycleInput").value) || prefs.sessionsPerCycle;
+        changeSessionsPerCycle(current + Number(button.dataset.sessionDelta));
+      }));
       $("autoStartInput").addEventListener("change", (event) => { prefs.autoStart = event.target.checked; savePrefs(); render(); toast(prefs.autoStart ? "The next interval will start automatically." : "Intervals will switch and wait for you."); });
       $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; savePrefs(); render(); if (prefs.sound) { playPhaseCue(phase); toast("Sound is on. Focus and break have different cues."); } });
 

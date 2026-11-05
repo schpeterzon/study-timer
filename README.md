@@ -16,9 +16,9 @@ Study Timer keeps the interface quiet while making it easy to shape a work and r
 
 | Focus | Break | Make it yours |
 | --- | --- | --- |
-| Adjustable 1–180 minute focus sessions | Adjustable 1–60 minute breaks | Focus and Calm themes, each in light and dark |
+| Adjustable 1–180 minute focus sessions | Adjustable 1–60 minute breaks | Choose 1–12 focus sessions per cycle |
 | Automatic focus-to-break switching | A separate warm break appearance and transition animation | Optional, different audio cues for focus and breaks |
-| Daily session and focus-time totals | Optional automatic start for the next interval | Preferences and progress saved in this browser |
+| Daily session and focus-time totals | Optional automatic start for the next interval | Four themes, plus a restore-defaults control that clears saved progress |
 
 ### The session cycle
 
