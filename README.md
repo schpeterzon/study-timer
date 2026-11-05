@@ -3,7 +3,8 @@
   <h1>Study Timer</h1>
   <p><strong>Make room for focused work and real rest.</strong><br>
   A calm, customizable study timer that moves between focus and break sessions for you.</p>
-  <p><img src="docs/study-timer-screenshot.png" width="1000" alt="Study Timer web app showing the focus timer and interval settings"></p>
+  <p><img src="docs/study-timer-screenshot.png" width="1000" alt="Study Timer in the Calm Dark theme, showing the focus timer and interval settings"></p>
+  <p><em>Calm · Dark theme</em></p>
   <p><a href="#quick-start">Quick start</a> · <a href="#deploy-with-docker">Docker</a> · <a href="#deploy-with-portainer">Portainer</a> · <a href="#deploy-to-kubernetes">Kubernetes</a></p>
   <p><code>Static app</code> &nbsp; <code>No account</code> &nbsp; <code>Four themes</code> &nbsp; <code>Fullscreen timer</code> &nbsp; <code>Container ready</code></p>
 </div>
