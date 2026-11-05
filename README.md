@@ -3,7 +3,7 @@
   <h1>Study Timer</h1>
   <p><strong>Make room for focused work and real rest.</strong><br>
   A calm, customizable study timer that moves between focus and break sessions for you.</p>
-  <p><img src="docs/study-timer-cycle.gif" width="720" alt="Animated Study Timer preview switching from a focus session to a rest break"></p>
+  <p><img src="docs/study-timer-screenshot.png" width="1000" alt="Study Timer web app showing the focus timer and interval settings"></p>
   <p><a href="#quick-start">Quick start</a> · <a href="#deploy-with-docker">Docker</a> · <a href="#deploy-with-portainer">Portainer</a> · <a href="#deploy-to-kubernetes">Kubernetes</a></p>
   <p><code>Static app</code> &nbsp; <code>No account</code> &nbsp; <code>Four themes</code> &nbsp; <code>Container ready</code></p>
 </div>
@@ -201,7 +201,7 @@ Timer preferences, theme choice, and daily progress are saved in this browser's 
 ├── assets/
 │   └── icon.svg
 ├── docs/
-│   └── study-timer-cycle.gif
+│   └── study-timer-screenshot.png
 ├── k8s/
 │   └── study-timer.yaml
 ├── Dockerfile
