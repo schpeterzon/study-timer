@@ -5,7 +5,7 @@
   A calm, customizable study timer that moves between focus and break sessions for you.</p>
   <p><img src="docs/study-timer-screenshot.png" width="1000" alt="Study Timer web app showing the focus timer and interval settings"></p>
   <p><a href="#quick-start">Quick start</a> · <a href="#deploy-with-docker">Docker</a> · <a href="#deploy-with-portainer">Portainer</a> · <a href="#deploy-to-kubernetes">Kubernetes</a></p>
-  <p><code>Static app</code> &nbsp; <code>No account</code> &nbsp; <code>Four themes</code> &nbsp; <code>Container ready</code></p>
+  <p><code>Static app</code> &nbsp; <code>No account</code> &nbsp; <code>Four themes</code> &nbsp; <code>Fullscreen timer</code> &nbsp; <code>Container ready</code></p>
 </div>
 
 ---
@@ -18,7 +18,8 @@ Study Timer keeps the interface quiet while making it easy to shape a work and r
 | --- | --- | --- |
 | Adjustable 1–180 minute focus sessions | Adjustable 1–60 minute breaks | Choose 1–12 focus sessions per cycle |
 | Automatic focus-to-break switching | A separate warm break appearance and transition animation | Optional, different audio cues for focus and breaks |
-| Daily session and focus-time totals | Optional automatic start for the next interval | Four themes, plus a restore-defaults control that clears saved progress |
+| Daily session and focus-time totals | Optional automatic start for the next interval | Green Calm theme follows your device's light or dark setting by default; restore defaults clears progress |
+| Fullscreen timer with an in-view exit control | Animated cycle progress when you change the session count | Focus and break sounds are on by default and can be switched off |
 
 ### The session cycle
 
@@ -192,7 +193,7 @@ Upload `index.html` and the `assets/` directory to the document root of your sta
 | <kbd>R</kbd> | Reset the current interval |
 | <kbd>N</kbd> | Skip to the next interval |
 
-Timer preferences, theme choice, and daily progress are saved in this browser's `localStorage`. They stay in the current browser profile and do not sync between devices. Sound is off until enabled in the app.
+Timer preferences, theme choice, and daily progress are saved in this browser's `localStorage`. They stay in the current browser profile and do not sync between devices. Sound starts on by default, and you can switch it off in the app. Theme selection follows the device's color scheme until you choose a theme manually.
 
 ## Repository layout
 

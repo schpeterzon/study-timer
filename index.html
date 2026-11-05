@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#edf1f5">
+  <meta name="theme-color" content="#eaf0e9">
   <meta name="description" content="A calm, customizable study timer that keeps focus and rest in rhythm.">
   <title>Study Timer — find your flow</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -173,8 +173,8 @@
     .stat-value { margin-top: 5px; color: var(--ink); font-family: var(--serif); font-size: 23px; line-height: 1; }
     .stat-value small { color: var(--muted); font-family: var(--font); font-size: 10px; }
     .workspace { display: grid; grid-template-columns: minmax(0, 1.57fr) minmax(300px, .93fr); gap: 16px; align-items: stretch; }
-    .panel { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 21px; background: var(--surface); box-shadow: var(--shadow); }
-    .timer-panel { display: flex; flex-direction: column; min-height: 526px; padding: 24px 30px 18px; transition: background .45s ease, border-color .45s ease; }
+    .panel { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 21px; background: var(--surface); box-shadow: var(--shadow); transition: background .35s ease, border-color .35s ease, box-shadow .35s ease; }
+    .timer-panel { display: flex; flex-direction: column; min-height: 526px; padding: 24px 30px 18px; transition: background .45s ease, border-color .45s ease, border-radius .35s ease, padding .35s ease; }
     .timer-panel[data-phase="break"] {
       --accent: var(--break-accent);
       --accent-hover: var(--break-accent-hover);
@@ -192,10 +192,14 @@
     .timer-stage { position: relative; display: grid; place-items: center; flex: 1; min-height: 328px; padding: 4px 0 8px; }
     .timer-stage::before { position: absolute; z-index: 0; width: 294px; height: 294px; border-radius: 50%; background: radial-gradient(circle, var(--accent-soft) 0%, color-mix(in srgb, var(--accent-soft) 42%, transparent) 45%, transparent 72%); content: ""; filter: blur(12px); opacity: .55; pointer-events: none; }
     .timer-stage.is-break-arriving::before { animation: break-glow-in .9s ease-out both; }
-    .timer-ring { position: relative; z-index: 1; width: 270px; max-width: 80vw; aspect-ratio: 1; }
+    .timer-stage.is-study-arriving::before { animation: study-glow-in .7s ease-out both; }
+    .timer-ring { position: relative; z-index: 1; width: 270px; max-width: 80vw; aspect-ratio: 1; transition: width .35s cubic-bezier(.2,.7,.25,1), filter .35s ease; }
     .timer-stage.is-break-arriving .timer-ring { animation: break-ring-in .8s cubic-bezier(.2,.75,.25,1) both; }
+    .timer-stage.is-study-arriving .timer-ring { animation: study-ring-in .7s cubic-bezier(.2,.75,.25,1) both; }
     @keyframes break-ring-in { 0% { opacity: .55; transform: scale(.93); } 68% { opacity: 1; transform: scale(1.025); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes break-glow-in { 0% { opacity: .2; transform: scale(.82); } 45% { opacity: .85; transform: scale(1.08); } 100% { opacity: .55; transform: scale(1); } }
+    @keyframes study-ring-in { 0% { opacity: .6; transform: scale(.96); } 58% { opacity: 1; transform: scale(1.025); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes study-glow-in { 0% { opacity: .25; transform: scale(.9); } 55% { opacity: .7; transform: scale(1.04); } 100% { opacity: .55; transform: scale(1); } }
     .timer-ring svg { display: block; width: 100%; height: 100%; overflow: visible; transform: rotate(-90deg); }
     .ring-track, .ring-progress { fill: none; stroke-width: 6; }
     .ring-track { stroke: var(--line); }
@@ -216,12 +220,16 @@
     .icon-button svg { width: 16px; height: 16px; }
     .timer-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 15px; border-top: 1px solid var(--line); }
     .cycle-copy { display: flex; flex-direction: column; gap: 5px; }
-    .cycle-title { color: var(--ink-soft); font-size: 10px; font-weight: 700; }
+    .cycle-title { display: inline-block; color: var(--ink-soft); font-size: 10px; font-weight: 700; }
     .cycle-caption { color: var(--muted); font-size: 9px; }
     .cycle-dots { display: flex; align-items: center; gap: 6px; }
-    .cycle-dot { width: 19px; height: 6px; border-radius: 20px; background: var(--line-strong); transition: background .25s, width .25s; }
+    .cycle-dot { width: 19px; height: 6px; border-radius: 20px; background: var(--line-strong); transform-origin: center; transition: background .25s, width .25s; }
     .cycle-dot.is-done { background: var(--accent); }
     .cycle-dot.is-current { width: 27px; background: var(--warm); }
+    .cycle-dots.is-changing .cycle-dot { animation: cycle-dot-arrive .46s cubic-bezier(.2,.8,.25,1) both; animation-delay: calc(var(--dot-index, 0) * 24ms); }
+    .cycle-title.is-changing { animation: cycle-count-bump .42s ease-out both; }
+    @keyframes cycle-dot-arrive { 0% { opacity: .2; transform: translateY(5px) scale(.58); } 68% { opacity: 1; transform: translateY(-2px) scale(1.16); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes cycle-count-bump { 0% { opacity: .55; transform: scale(.9); } 65% { opacity: 1; transform: scale(1.08); } 100% { transform: scale(1); } }
     .foot-tools { display: flex; align-items: center; gap: 12px; }
     .sound-button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 0; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; }
     .sound-button:hover, .sound-button[aria-pressed="true"] { color: var(--accent); }
@@ -230,13 +238,18 @@
     .settings-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
     h2 { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 500; letter-spacing: -.035em; }
     .section-copy { margin: 6px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
-    .settings-spark { display: grid; place-items: center; flex: 0 0 auto; width: 34px; height: 34px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); }
-    .settings-spark svg { width: 17px; height: 17px; }
+    .fullscreen-button { display: grid; place-items: center; flex: 0 0 auto; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 12px; background: var(--accent-soft); color: var(--accent); cursor: pointer; transition: background .2s, color .2s, transform .25s, box-shadow .25s; }
+    .fullscreen-button svg { width: 17px; height: 17px; }
+    .fullscreen-button:hover { background: var(--accent); color: var(--accent-contrast); transform: scale(1.06); box-shadow: 0 5px 14px var(--focus-glow); }
+    .fullscreen-button:active { transform: scale(.94); }
+    .panel-heading-actions { display: flex; align-items: center; gap: 8px; }
+    .fullscreen-exit-button[hidden] { display: none; }
     .duration-list { display: grid; gap: 10px; }
-    .duration-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 13px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-raised); }
+    .duration-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 13px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-raised); transition: transform .2s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease; }
     .session-count-card { grid-column: 1 / -1; }
     .session-count-card .duration-hint { max-width: 175px; white-space: normal; }
     .duration-card.is-active { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); box-shadow: 0 0 0 3px var(--focus-glow); }
+    .duration-card:hover { transform: translateY(-1px); }
     .duration-meta { display: flex; align-items: center; gap: 11px; min-width: 0; }
     .duration-icon { display: grid; place-items: center; flex: 0 0 auto; width: 34px; height: 34px; border-radius: 11px; background: var(--accent-wash); color: var(--accent); }
     .duration-card[data-kind="break"] .duration-icon { background: color-mix(in srgb, var(--warm) 16%, var(--surface-raised)); color: #aa7c43; }
@@ -274,6 +287,22 @@
     .reset-defaults-button:hover { color: var(--accent); text-decoration-color: currentColor; }
     .toast { position: fixed; z-index: 8; right: 24px; bottom: 24px; max-width: calc(100vw - 48px); padding: 12px 15px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface-raised); color: var(--ink); box-shadow: var(--shadow); font-size: 11px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
     .toast.is-visible { opacity: 1; transform: translateY(0); }
+    .timer-panel:fullscreen, .timer-panel.is-fullscreen-fallback { position: fixed; z-index: 10; inset: 0; display: flex; width: 100vw; height: 100vh; height: 100dvh; min-height: 100vh; min-height: 100dvh; padding: clamp(24px, 5vh, 56px) clamp(24px, 8vw, 120px); border: 0; border-radius: 0; overflow: auto; background: var(--surface); }
+    .timer-panel:fullscreen .panel-heading-actions .flow-badge, .timer-panel.is-fullscreen-fallback .panel-heading-actions .flow-badge { margin-left: auto; }
+    .timer-panel:fullscreen .fullscreen-exit-button, .timer-panel.is-fullscreen-fallback .fullscreen-exit-button { width: 40px; height: 40px; }
+    .timer-panel:fullscreen .timer-stage, .timer-panel.is-fullscreen-fallback .timer-stage { min-height: 0; padding: 3vh 0; }
+    .timer-panel:fullscreen .timer-ring, .timer-panel.is-fullscreen-fallback .timer-ring { width: min(56vh, 48vw, 520px); max-width: 82vw; }
+    .timer-panel:fullscreen .timer-display, .timer-panel.is-fullscreen-fallback .timer-display { font-size: clamp(76px, 10vw, 128px); }
+    .timer-panel:fullscreen .phase-label, .timer-panel.is-fullscreen-fallback .phase-label { margin-bottom: 20px; font-size: 12px; }
+    .timer-panel:fullscreen .timer-subline, .timer-panel.is-fullscreen-fallback .timer-subline { max-width: 28ch; margin-top: 17px; font-size: 11px; }
+    .timer-panel:fullscreen .timer-buttons, .timer-panel.is-fullscreen-fallback .timer-buttons { margin: 1vh 0 2vh; }
+    .timer-panel:fullscreen .primary-button, .timer-panel.is-fullscreen-fallback .primary-button { min-width: 190px; height: 56px; font-size: 14px; }
+    .timer-panel:fullscreen .icon-button, .timer-panel.is-fullscreen-fallback .icon-button { width: 52px; height: 52px; }
+    .timer-panel:fullscreen .cycle-title, .timer-panel.is-fullscreen-fallback .cycle-title { font-size: 13px; }
+    .timer-panel:fullscreen .cycle-caption, .timer-panel.is-fullscreen-fallback .cycle-caption { font-size: 11px; }
+    .timer-panel:fullscreen .cycle-dot, .timer-panel.is-fullscreen-fallback .cycle-dot { width: 25px; height: 8px; }
+    .timer-panel:fullscreen .cycle-dot.is-current, .timer-panel.is-fullscreen-fallback .cycle-dot.is-current { width: 36px; }
+    .timer-panel:fullscreen .sound-button, .timer-panel.is-fullscreen-fallback .sound-button { font-size: 12px; }
     .page-footer { display: flex; justify-content: space-between; gap: 12px; margin: 16px 4px 0; color: var(--muted); font-size: 9px; }
     .keyboard-hints { display: flex; gap: 12px; }
     kbd { padding: 2px 5px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); color: var(--ink-soft); font: inherit; font-size: 8px; }
@@ -305,6 +334,9 @@
       .workspace { gap: 12px; }
       .panel { border-radius: 18px; }
       .timer-panel { min-height: 478px; padding: 19px 16px 15px; }
+      .timer-panel:fullscreen, .timer-panel.is-fullscreen-fallback { padding: 20px 16px 18px; }
+      .timer-panel:fullscreen .timer-ring, .timer-panel.is-fullscreen-fallback .timer-ring { width: min(54vh, 78vw, 400px); max-width: 82vw; }
+      .timer-panel:fullscreen .timer-display, .timer-panel.is-fullscreen-fallback .timer-display { font-size: clamp(64px, 17vw, 96px); }
       .flow-badge { padding: 6px 8px; font-size: 8px; }
       .timer-stage { min-height: 296px; padding: 0 0 8px; }
       .timer-stage::before { width: 260px; height: 260px; }
@@ -376,7 +408,12 @@
         <section class="panel timer-panel" id="timerPanel" data-phase="study" aria-label="Study and break timer">
           <div class="panel-heading">
             <span class="panel-eyebrow">YOUR NEXT SESSION</span>
-            <span class="flow-badge"><i class="tiny-dot"></i><span id="flowBadge">READY TO BEGIN</span></span>
+            <div class="panel-heading-actions">
+              <span class="flow-badge"><i class="tiny-dot"></i><span id="flowBadge">READY TO BEGIN</span></span>
+              <button class="fullscreen-button fullscreen-exit-button" id="fullscreenExitButton" type="button" aria-label="Exit fullscreen" title="Exit fullscreen" hidden>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4v4H4m16 0h-4V4M4 16h4v4m12-4h-4v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
           </div>
 
           <div class="timer-stage" id="timerStage">
@@ -422,7 +459,9 @@
         <aside class="panel settings-panel" aria-labelledby="settingsTitle">
           <div class="settings-heading">
             <div><h2 id="settingsTitle">Set your rhythm</h2><p class="section-copy">A pace that feels good is a pace you can keep.</p></div>
-            <span class="settings-spark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v4m0 10v4M3 12h4m10 0h4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8m0-12.8-2.8 2.8m-7.2 7.2-2.8 2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+            <button class="fullscreen-button" id="fullscreenButton" type="button" aria-label="Show timer fullscreen" title="Show timer fullscreen" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
 
           <div class="duration-list">
@@ -485,18 +524,24 @@
       const studyIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 7h6m-6 3h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
       const breakIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4v6m4-6v6M5 10h8M9 10v10m8-16v16m0-16c2 2 3 4.2 3 6.3 0 1.8-1.1 2.7-3 2.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       const dayKey = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-      const defaults = { studyMinutes: 25, breakMinutes: 5, sessionsPerCycle: 4, theme: "focus-light", autoStart: true, sound: false, completed: 0, focusMinutes: 0, date: dayKey() };
+      const colorSchemeQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+      const systemTheme = () => colorSchemeQuery && colorSchemeQuery.matches ? "calm-dark" : "calm-light";
+      const defaults = { studyMinutes: 25, breakMinutes: 5, sessionsPerCycle: 4, theme: systemTheme(), themeManuallySelected: false, autoStart: true, sound: true, soundManuallySet: false, completed: 0, focusMinutes: 0, date: dayKey() };
       const readJson = (key) => { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } };
       const initialPrefs = readJson(PREFS_KEY) || {};
       const isNewDay = initialPrefs.date && initialPrefs.date !== dayKey();
       const savedTheme = LEGACY_THEMES[initialPrefs.theme] || initialPrefs.theme;
+      const themeManuallySelected = typeof initialPrefs.themeManuallySelected === "boolean" ? initialPrefs.themeManuallySelected : Boolean(savedTheme && savedTheme !== "focus-light");
+      const soundManuallySet = typeof initialPrefs.soundManuallySet === "boolean" ? initialPrefs.soundManuallySet : false;
       const prefs = {
         studyMinutes: clamp(Number(initialPrefs.studyMinutes) || defaults.studyMinutes, 1, 180),
         breakMinutes: clamp(Number(initialPrefs.breakMinutes) || defaults.breakMinutes, 1, 60),
         sessionsPerCycle: clamp(Math.floor(Number(initialPrefs.sessionsPerCycle) || defaults.sessionsPerCycle), 1, 12),
-        theme: THEMES[savedTheme] ? savedTheme : defaults.theme,
+        theme: themeManuallySelected && THEMES[savedTheme] ? savedTheme : systemTheme(),
+        themeManuallySelected,
         autoStart: typeof initialPrefs.autoStart === "boolean" ? initialPrefs.autoStart : defaults.autoStart,
-        sound: typeof initialPrefs.sound === "boolean" ? initialPrefs.sound : defaults.sound,
+        sound: soundManuallySet && typeof initialPrefs.sound === "boolean" ? initialPrefs.sound : defaults.sound,
+        soundManuallySet,
         completed: isNewDay ? 0 : Math.max(0, Math.floor(Number(initialPrefs.completed) || 0)),
         focusMinutes: isNewDay ? 0 : Math.max(0, Math.floor(Number(initialPrefs.focusMinutes) || 0)),
         date: dayKey()
@@ -517,6 +562,7 @@
       const startButton = $("startButton");
       let audioContext = null;
       let toastTimeout;
+      let cycleAnimationTimeout;
 
       function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
       function minutesFor(which) { return which === "study" ? prefs.studyMinutes : prefs.breakMinutes; }
@@ -528,9 +574,9 @@
         const el = $("toast"); el.textContent = message; el.classList.add("is-visible");
         clearTimeout(toastTimeout); toastTimeout = setTimeout(() => el.classList.remove("is-visible"), 2600);
       }
-      function setTheme(theme) {
+      function setTheme(theme, manuallySelected = prefs.themeManuallySelected) {
         if (!THEMES[theme]) return;
-        prefs.theme = theme; document.body.dataset.theme = theme; $("themeName").textContent = THEMES[theme].label;
+        prefs.theme = theme; prefs.themeManuallySelected = manuallySelected; document.body.dataset.theme = theme; $("themeName").textContent = THEMES[theme].label;
         document.querySelector('meta[name="theme-color"]').content = THEMES[theme].browserColor;
         document.querySelectorAll("[data-theme-choice]").forEach((button) => {
           const active = button.dataset.themeChoice === theme;
@@ -577,7 +623,11 @@
         const cycleProgressKey = `${cycleTarget}:${completedThisCycle}:${cycleComplete}`;
         if (cycleDots.dataset.progress !== cycleProgressKey) {
           if (cycleDots.childElementCount !== cycleTarget) {
-            cycleDots.replaceChildren(...Array.from({ length: cycleTarget }, () => document.createElement("i")));
+            cycleDots.replaceChildren(...Array.from({ length: cycleTarget }, (_, index) => {
+              const dot = document.createElement("i");
+              dot.style.setProperty("--dot-index", index);
+              return dot;
+            }));
           }
           [...cycleDots.children].forEach((dot, index) => {
             dot.className = "cycle-dot";
@@ -601,20 +651,20 @@
         endAt = Date.now() + remaining * 1000; isRunning = true; saveTimer(); render();
       }
       function reset() { isRunning = false; endAt = null; remaining = secondsFor(phase); saveTimer(); render(); toast("Timer reset. Start whenever you’re ready."); }
-      function animateBreakArrival() {
+      function animatePhaseArrival(which) {
         const stage = $("timerStage");
-        stage.classList.remove("is-break-arriving");
+        stage.classList.remove("is-break-arriving", "is-study-arriving");
         void stage.offsetWidth;
-        stage.classList.add("is-break-arriving");
-        setTimeout(() => stage.classList.remove("is-break-arriving"), 950);
+        const className = which === "break" ? "is-break-arriving" : "is-study-arriving";
+        stage.classList.add(className);
+        setTimeout(() => stage.classList.remove(className), 950);
       }
       function selectPhase(next, autoRun = false) {
         const phaseChanged = phase !== next;
-        const enteringBreak = phase !== "break" && next === "break";
         phase = next; remaining = secondsFor(phase); endAt = null; isRunning = false;
         if (autoRun && prefs.autoStart) { endAt = Date.now() + remaining * 1000; isRunning = true; }
         saveTimer(); render();
-        if (enteringBreak) animateBreakArrival();
+        if (phaseChanged) animatePhaseArrival(next);
         if (phaseChanged && prefs.sound) playPhaseCue(next);
       }
       function completeInterval() {
@@ -626,7 +676,7 @@
         phase = next; remaining = secondsFor(next);
         if (prefs.autoStart) { isRunning = true; endAt = Date.now() + remaining * 1000; }
         saveTimer(); render();
-        if (next === "break") animateBreakArrival();
+        animatePhaseArrival(next);
         if (prefs.sound) playPhaseCue(next);
         toast(finished === "study" ? "Focus session complete. Time to rest." : "Break complete. Ready for another focus session?");
       }
@@ -667,6 +717,28 @@
           if (context && context.state !== "running") context.resume().catch(() => {});
         } catch {}
       }
+      async function toggleFullscreen() {
+        const panel = $("timerPanel");
+        try {
+          if (document.fullscreenElement === panel) await document.exitFullscreen();
+          else if (panel.classList.contains("is-fullscreen-fallback")) {
+            panel.classList.remove("is-fullscreen-fallback"); document.body.style.overflow = ""; syncFullscreenControls();
+          }
+          else if (panel.requestFullscreen) await panel.requestFullscreen();
+          else {
+            panel.classList.add("is-fullscreen-fallback"); document.body.style.overflow = "hidden"; syncFullscreenControls();
+          }
+        } catch { toast("Fullscreen could not be opened. Try the browser's fullscreen shortcut."); }
+      }
+      function syncFullscreenControls() {
+        const panel = $("timerPanel");
+        const active = document.fullscreenElement === panel || panel.classList.contains("is-fullscreen-fallback");
+        const enterButton = $("fullscreenButton");
+        $("fullscreenExitButton").hidden = !active;
+        enterButton.setAttribute("aria-pressed", String(active));
+        enterButton.setAttribute("aria-label", active ? "Exit fullscreen" : "Show timer fullscreen");
+        enterButton.title = active ? "Exit fullscreen" : "Show timer fullscreen";
+      }
       function changeDuration(kind, value) {
         const max = kind === "study" ? 180 : 60;
         const oldTotal = secondsFor(kind);
@@ -682,12 +754,20 @@
         savePrefs(); saveTimer(); render();
       }
       function changeSessionsPerCycle(value) {
-        prefs.sessionsPerCycle = clamp(Math.round(Number(value) || 1), 1, 12);
+        const next = clamp(Math.round(Number(value) || 1), 1, 12);
+        if (next === prefs.sessionsPerCycle) return;
+        prefs.sessionsPerCycle = next;
         savePrefs(); render();
+        const dots = $("cycleDots"); const title = $("cycleTitle");
+        dots.classList.remove("is-changing"); title.classList.remove("is-changing");
+        void dots.offsetWidth;
+        dots.classList.add("is-changing"); title.classList.add("is-changing");
+        clearTimeout(cycleAnimationTimeout);
+        cycleAnimationTimeout = setTimeout(() => { dots.classList.remove("is-changing"); title.classList.remove("is-changing"); }, 700);
       }
       function restoreDefaults() {
         if (!window.confirm("Restore all default settings and clear today's session progress and timer?")) return;
-        Object.assign(prefs, defaults, { date: dayKey() });
+        Object.assign(prefs, defaults, { theme: systemTheme(), themeManuallySelected: false, sound: true, soundManuallySet: false, date: dayKey() });
         phase = "study"; remaining = secondsFor("study"); isRunning = false; endAt = null;
         try { localStorage.removeItem(PREFS_KEY); localStorage.removeItem(TIMER_KEY); } catch {}
         if (audioContext && audioContext.state !== "closed") audioContext.close().catch(() => {});
@@ -697,6 +777,9 @@
       }
 
       $("startButton").addEventListener("click", start);
+      $("fullscreenButton").addEventListener("click", toggleFullscreen);
+      $("fullscreenExitButton").addEventListener("click", toggleFullscreen);
+      document.addEventListener("fullscreenchange", syncFullscreenControls);
       $("resetButton").addEventListener("click", reset);
       $("restoreDefaultsButton").addEventListener("click", restoreDefaults);
       $("skipButton").addEventListener("click", () => { selectPhase(phase === "study" ? "break" : "study", true); toast(`Switched to ${phase === "study" ? "focus" : "your break"}.`); });
@@ -712,7 +795,7 @@
         changeSessionsPerCycle(current + Number(button.dataset.sessionDelta));
       }));
       $("autoStartInput").addEventListener("change", (event) => { prefs.autoStart = event.target.checked; savePrefs(); render(); toast(prefs.autoStart ? "The next interval will start automatically." : "Intervals will switch and wait for you."); });
-      $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; savePrefs(); render(); if (prefs.sound) { playPhaseCue(phase); toast("Sound is on. Focus and break have different cues."); } });
+      $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; prefs.soundManuallySet = true; savePrefs(); render(); if (prefs.sound) { playPhaseCue(phase); toast("Sound is on. Focus and break have different cues."); } });
 
       const themeMenu = $("themeMenu");
       $("themeTrigger").addEventListener("click", () => {
@@ -720,13 +803,19 @@
         if (opening) themeMenu.querySelector("[aria-pressed='true']").focus();
       });
       document.querySelectorAll("[data-theme-choice]").forEach((button) => button.addEventListener("click", () => {
-        setTheme(button.dataset.themeChoice); themeMenu.hidden = true; $("themeTrigger").setAttribute("aria-expanded", "false"); $("themeTrigger").focus();
+        setTheme(button.dataset.themeChoice, true); themeMenu.hidden = true; $("themeTrigger").setAttribute("aria-expanded", "false"); $("themeTrigger").focus();
       }));
+      if (colorSchemeQuery) {
+        const followSystemTheme = () => { if (!prefs.themeManuallySelected) setTheme(systemTheme(), false); };
+        if (colorSchemeQuery.addEventListener) colorSchemeQuery.addEventListener("change", followSystemTheme);
+        else if (colorSchemeQuery.addListener) colorSchemeQuery.addListener(followSystemTheme);
+      }
       document.addEventListener("click", (event) => {
         if (!$("themeWrap").contains(event.target)) { themeMenu.hidden = true; $("themeTrigger").setAttribute("aria-expanded", "false"); }
       });
       document.addEventListener("keydown", (event) => {
         const target = event.target;
+        if (event.key === "Escape" && $("timerPanel").classList.contains("is-fullscreen-fallback")) { toggleFullscreen(); return; }
         if (event.key === "Escape" && !themeMenu.hidden) { themeMenu.hidden = true; $("themeTrigger").setAttribute("aria-expanded", "false"); $("themeTrigger").focus(); return; }
         if (target.matches("input, textarea, select") || event.altKey || event.ctrlKey || event.metaKey) return;
         if (event.code === "Space") { event.preventDefault(); start(); }
