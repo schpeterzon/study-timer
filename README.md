@@ -6,7 +6,7 @@ A quiet, customizable timer for focused study sessions and proper breaks. It is 
 
 - Adjustable focus and break intervals with automatic switching
 - Four themes: Focus and Calm, each in light and dark
-- Optional interval chime and auto-start
+- Optional, distinct rising focus and descending break cues, plus auto-start
 - Daily session count and focus time
 - Keyboard shortcuts: **Space** to start or pause, **R** to reset, and **N** to skip
 - Preferences and progress saved in the current browser
