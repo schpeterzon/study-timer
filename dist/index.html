@@ -163,7 +163,7 @@
     .phase-icon { color: var(--accent); }
     .phase-icon svg { display: block; width: 14px; height: 14px; }
     .timer-display { color: var(--ink); font-variant-numeric: tabular-nums; font-family: var(--serif); font-size: clamp(55px, 7vw, 72px); font-weight: 500; letter-spacing: -.055em; line-height: .94; }
-    .timer-subline { margin-top: 14px; color: var(--muted); font-size: 9px; font-weight: 750; letter-spacing: .17em; text-transform: uppercase; }
+    .timer-subline { max-width: 140px; margin-top: 11px; color: var(--muted); font-size: 8px; font-weight: 750; letter-spacing: .1em; line-height: 1.4; text-align: center; text-transform: uppercase; text-wrap: balance; }
     .timer-buttons { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 4px 0 20px; }
     .primary-button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-width: 154px; height: 46px; padding: 0 19px; border: 0; border-radius: 13px; background: var(--accent); color: var(--accent-contrast); cursor: pointer; font-size: 12px; font-weight: 750; box-shadow: 0 8px 18px var(--focus-glow); transition: transform .2s, background .2s, box-shadow .2s; }
     .primary-button:hover { transform: translateY(-2px); background: var(--accent-hover); box-shadow: 0 11px 22px var(--focus-glow); }
@@ -340,7 +340,7 @@
               <div class="ring-text">
                 <div class="phase-label"><span class="phase-icon" id="phaseIcon"></span><span id="phaseLabel">FOCUS TIME</span></div>
                 <div class="timer-display" id="timerDisplay">25:00</div>
-                <div class="timer-subline" id="timerSubline">A moment for what matters</div>
+                <div class="timer-subline" id="timerSubline">One thing at a time</div>
               </div>
             </div>
           </div>
@@ -482,7 +482,7 @@
         ring.style.strokeDashoffset = String(791.68 * (1 - ratio));
         $("phaseLabel").textContent = phase === "study" ? "FOCUS TIME" : "REST BREAK";
         $("phaseIcon").innerHTML = phase === "study" ? studyIcon : breakIcon;
-        $("timerSubline").textContent = phase === "study" ? "A moment for what matters" : "Let your mind wander";
+        $("timerSubline").textContent = phase === "study" ? "One thing at a time" : "Take a real pause";
         $("flowBadge").textContent = isRunning ? (phase === "study" ? "IN A FOCUS SESSION" : "TAKING A BREATHER") : "READY WHEN YOU ARE";
         $("startLabel").textContent = isRunning ? "Take a pause" : remaining < total ? "Keep going" : (phase === "study" ? "Begin focus" : "Begin break");
         $("startIcon").innerHTML = isRunning
