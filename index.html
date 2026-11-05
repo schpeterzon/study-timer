@@ -405,7 +405,7 @@
             <div class="cycle-copy"><span class="cycle-title" id="cycleTitle">Your focus cycle</span><span class="cycle-caption" id="cycleCaption">A small win at a time</span></div>
             <div class="cycle-dots" aria-label="Progress through four sessions"><i class="cycle-dot is-current"></i><i class="cycle-dot"></i><i class="cycle-dot"></i><i class="cycle-dot"></i></div>
             <div class="foot-tools">
-              <button class="sound-button" id="soundButton" type="button" aria-pressed="false" title="Toggle completion sound">
+              <button class="sound-button" id="soundButton" type="button" aria-pressed="false" title="Toggle distinct focus and break sounds">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 9a4 4 0 0 1 0 6m2-8a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 <span id="soundLabel">Sound off</span>
               </button>
@@ -501,6 +501,7 @@
       const display = $("timerDisplay");
       const ring = $("ringProgress");
       const startButton = $("startButton");
+      let audioContext = null;
       let toastTimeout;
 
       function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
@@ -566,6 +567,7 @@
           remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
           isRunning = false; endAt = null; saveTimer(); render(); return;
         }
+        if (prefs.sound) prepareAudio();
         if (remaining <= 0) remaining = secondsFor(phase);
         endAt = Date.now() + remaining * 1000; isRunning = true; saveTimer(); render();
       }
@@ -578,40 +580,62 @@
         setTimeout(() => stage.classList.remove("is-break-arriving"), 950);
       }
       function selectPhase(next, autoRun = false) {
+        const phaseChanged = phase !== next;
         const enteringBreak = phase !== "break" && next === "break";
         phase = next; remaining = secondsFor(phase); endAt = null; isRunning = false;
         if (autoRun && prefs.autoStart) { endAt = Date.now() + remaining * 1000; isRunning = true; }
         saveTimer(); render();
         if (enteringBreak) animateBreakArrival();
+        if (phaseChanged && prefs.sound) playPhaseCue(next);
       }
       function completeInterval() {
         const finished = phase;
         isRunning = false; endAt = null;
         if (prefs.date !== dayKey()) { prefs.date = dayKey(); prefs.completed = 0; prefs.focusMinutes = 0; }
         if (finished === "study") { prefs.completed += 1; prefs.focusMinutes += minutesFor("study"); savePrefs(); }
-        if (prefs.sound) playChime();
         const next = finished === "study" ? "break" : "study";
         phase = next; remaining = secondsFor(next);
         if (prefs.autoStart) { isRunning = true; endAt = Date.now() + remaining * 1000; }
         saveTimer(); render();
         if (next === "break") animateBreakArrival();
+        if (prefs.sound) playPhaseCue(next);
         toast(finished === "study" ? "Focus session complete. Time to rest." : "Break complete. Ready for another focus session?");
       }
-      function playChime() {
+      function playPhaseCue(which) {
         try {
-          const Context = window.AudioContext || window.webkitAudioContext;
-          if (!Context) return;
-          const context = new Context(); const now = context.currentTime;
-          [523.25, 659.25, 783.99].forEach((frequency, index) => {
-            const oscillator = context.createOscillator(); const gain = context.createGain();
-            oscillator.type = "sine"; oscillator.frequency.value = frequency;
-            gain.gain.setValueAtTime(.0001, now + index * .15);
-            gain.gain.exponentialRampToValueAtTime(.08, now + index * .15 + .025);
-            gain.gain.exponentialRampToValueAtTime(.0001, now + index * .15 + .36);
-            oscillator.connect(gain); gain.connect(context.destination);
-            oscillator.start(now + index * .15); oscillator.stop(now + index * .15 + .38);
-          });
-          setTimeout(() => context.close(), 900);
+          const context = getAudioContext();
+          if (!context) return;
+          const notes = which === "break"
+            ? [{ frequency: 392, offset: 0, length: .28 }, { frequency: 293.66, offset: .2, length: .4 }]
+            : [{ frequency: 523.25, offset: 0, length: .2 }, { frequency: 783.99, offset: .16, length: .3 }];
+          const tone = which === "break" ? "triangle" : "sine";
+          const volume = which === "break" ? .065 : .08;
+          const play = () => {
+            const now = context.currentTime;
+            notes.forEach(({ frequency, offset, length }) => {
+              const oscillator = context.createOscillator(); const gain = context.createGain();
+              oscillator.type = tone; oscillator.frequency.value = frequency;
+              gain.gain.setValueAtTime(.0001, now + offset);
+              gain.gain.exponentialRampToValueAtTime(volume, now + offset + .025);
+              gain.gain.exponentialRampToValueAtTime(.0001, now + offset + length);
+              oscillator.connect(gain); gain.connect(context.destination);
+              oscillator.start(now + offset); oscillator.stop(now + offset + length + .02);
+            });
+          };
+          if (context.state !== "running") context.resume().then(play).catch(() => {});
+          else play();
+        } catch {}
+      }
+      function getAudioContext() {
+        const Context = window.AudioContext || window.webkitAudioContext;
+        if (!Context) return null;
+        if (!audioContext || audioContext.state === "closed") audioContext = new Context();
+        return audioContext;
+      }
+      function prepareAudio() {
+        try {
+          const context = getAudioContext();
+          if (context && context.state !== "running") context.resume().catch(() => {});
         } catch {}
       }
       function changeDuration(kind, value) {
@@ -639,7 +663,7 @@
       $("studyInput").addEventListener("change", (event) => changeDuration("study", event.target.value));
       $("breakInput").addEventListener("change", (event) => changeDuration("break", event.target.value));
       $("autoStartInput").addEventListener("change", (event) => { prefs.autoStart = event.target.checked; savePrefs(); render(); toast(prefs.autoStart ? "The next interval will start automatically." : "Intervals will switch and wait for you."); });
-      $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; savePrefs(); render(); if (prefs.sound) { playChime(); toast("A soft chime will mark each interval."); } });
+      $("soundButton").addEventListener("click", () => { prefs.sound = !prefs.sound; savePrefs(); render(); if (prefs.sound) { prepareAudio(); playPhaseCue(phase); toast("Sound is on. Focus and break have different cues."); } });
 
       const themeMenu = $("themeMenu");
       $("themeTrigger").addEventListener("click", () => {
