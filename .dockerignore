@@ -1,0 +1,8 @@
+.git
+.openai
+dist
+k8s
+README.md
+compose.yaml
+.dockerignore
+.gitignore
